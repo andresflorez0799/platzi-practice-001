@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Su peso en distintos planetas</title>
+    <style>
+        /**
+        * Mis estilos basicos para la practica
+        */
+        .fondo{
+            background-image: url("https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/gettyimages-145796232-1622211999.jpg?resize=640:*");
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        body {            
+            color: #ffffff;
+            text-align: center;
+            padding-top: 20px;
+        } 
+        button {
+            background-color: #000000;
+            color: #ffffff;
+            padding: 8px 16px;
+            border: 0px;
+            border-radius: 4px;
+            margin: 0px;
+        }
+        footer {
+            padding-top: 16px;
+            font-size: larger;
+            color: #ffffff;
+            position:absolute;
+            bottom:0;
+            left:16px;
+            height:60px;
+        }
+        .input-usuario {
+            padding: 8px 16px;
+            border: 0;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="fondo">
+    <h1>Indique cual es su peso en kilos y luego escriba un planeta</h1>
+    <br/>
+    <h3>Opcion #1 usando prompt</h3>
+    <button onclick="calular_peso1();">Invocar utilidad</button>
+
+    <span id="resultado"></span>
+
+    <br/>
+    <br/>
+    <h3>Opcion #2 usando controles html</h3>
+
+    <input placeholder="escriba su peso" type="number" id="peso" class="input-usuario"/>
+    <select id="planeta" class="input-usuario"></select>
+    <button onclick="calular_peso2();">Calcular</button>
+
+    <span id="resultado2"></span>
+
+<div style="width: 100%; padding-top: 64px;"><p>Lo bueno y bonito de esta propuesta es que solo basta con agregar a el json el planeta nuevo y el resto de la pagina cargara de forma dinamica, te invito a que veas el codigo, ahh y que deje dos opciones usando prompt y usando controles html</p></div>
+
+<footer>&copy; 2022 Andres Florez v1.0.0</footer>
+
+<script>
+    /*Declaro la gravedad de la tierra como constante y golbal porque se que no cambiara y se usa en dos funciones, al igual que las de los demas planetas*/    
+    const msj_error = "<h2>Upps, el planeta no lo tenemos registrado o el peso no es valido</h2>";
+    const gravedad_tierra = 9.8;
+    const gravedad_planetas = {
+            "kaiosama": 2000.5,
+            "makyo": 3000.5,
+            "polaris": 4000.5,
+            "zoon": 1.5,
+            "luud": 500.5,
+            "titan": 1000,
+            "mercurio": 3.7,
+            "venus": 8.87,
+            "marte": 9.71,
+            "saturno": 10.44,
+            "urano": 8.87,
+            "neptuno": 11.15,
+            "jupiter" : 9.8
+        };
+
+    /*
+    * se carga el listado de planetas a partir de la constante de planetas definidos previamente, con esto se busca que solo se tenga que crear el json con los planetas y ya
+    */
+    (Object.entries(gravedad_planetas)).forEach(planeta_tmp => {        
+        planeta.appendChild(new Option(planeta_tmp[0].toUpperCase(), planeta_tmp[1]));
+    });
+
+    /*
+    * Funcion numero 1 para el calculo de el peso por planeta, el listado dees de planetas se carga de forma automatica aprovechando la funcion de Object.keys
+    */
+    const calular_peso1 = () =>{
+        resultado.innerHTML = "";
+        let peso_usuario = prompt("Indique cual es su peso:");
+        let planeta_usuario = prompt("Indique un planeta para calcular: " + Object.keys(gravedad_planetas));
+        let gravedad_seleccionada = gravedad_planetas[planeta_usuario.toLowerCase()];
+
+        if(gravedad_seleccionada)
+        {
+            let resultado_calculado = (peso_usuario * gravedad_seleccionada / gravedad_tierra).toFixed(0);
+            resultado.innerHTML = ("<h2>Su peso en " + planeta_usuario + " es de: <b>" + resultado_calculado +"</b></h2>");
+        }else {
+            resultado.innerHTML = msj_error;
+        }
+    };
+
+    /**
+     * Funcion para calcular el valor de la gravedad en un planeta
+     * */
+    const calular_peso2 = () => {
+        if(peso.value){
+            let calculo = (peso.value * planeta.value / gravedad_tierra).toFixed(0);
+            resultado2.innerHTML = "<h2>Su peso en " + planeta.options[planeta.selectedIndex].text + " es de: " + calculo + "</h2>";
+        } else {
+            resultado2.innerHTML = msj_error;
+        } 
+    };
+</script>
+</body>
+</html>
